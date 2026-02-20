@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode mock",
+    "dev:api": "vite",
     "build": "tsc && concurrently \"npm run build:home\" \"npm run build:settings\" \"npm run build:files\"",
     "build:home": "cross-env PAGE=HomePage vite build --config vite.build.ts",
     "build:settings": "cross-env PAGE=SettingsPage vite build --config vite.build.ts",

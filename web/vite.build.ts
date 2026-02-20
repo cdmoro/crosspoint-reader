@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
   return {
     base: "./",
     build: {
+      deleteDest: false,
       outDir: "dist",
       minify: "esbuild",
       cssMinify: "lightningcss",

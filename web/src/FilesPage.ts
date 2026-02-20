@@ -29,10 +29,10 @@ async function hydrate() {
   let breadcrumbContent = '<span class="sep">/</span>';
   if (currentPath === "/") {
     breadcrumbContent +=
-      '<span class="current"><svg class="icon" aria-hidden="true"><use href="#icon-home"></use></svg></span>';
+      '<span class="current"><svg class="icon" aria-hidden="true"><use href="/icons.svg#icon-home"></use></svg></span>';
   } else {
     breadcrumbContent +=
-      '<a href="/files"><svg class="icon" aria-hidden="true"><use href="#icon-home"></use></svg></a>';
+      '<a href="/files"><svg class="icon" aria-hidden="true"><use href="/icons.svg#icon-home"></use></svg></a>';
     const pathSegments = currentPath.split("/");
     pathSegments
       .slice(1, pathSegments.length - 1)
@@ -62,7 +62,7 @@ async function hydrate() {
         "Failed to load files: " + response.status + " " + response.statusText,
       );
     }
-    files = await response.json() as FileEntry[];
+    files = (await response.json()) as FileEntry[];
   } catch (e) {
     fileTable.innerHTML =
       '<div class="no-files">An error occurred while loading the files</div>';
@@ -104,12 +104,12 @@ async function hydrate() {
 
         fileTableContent += '<tr class="folder-row">';
         fileTableContent +=
-          '<td><span class="file-icon"><svg class="icon icon-folder" aria-hidden="true"><use href="#icon-folder"></use></svg></span></td>';
+          '<td><span class="file-icon"><svg class="icon icon-folder" aria-hidden="true"><use href="/icons.svg#icon-folder"></use></svg></span></td>';
         fileTableContent += `<td><a href="/files?path=${encodeURIComponent(folderPath)}" class="folder-link">${escapeHtml(file.name)}</a></td>`;
         fileTableContent += "<td>Folder</td>";
         fileTableContent +=
           '<td class="size-col text-nowrap text-end">&ndash;</td>';
-        fileTableContent += `<td class="text-end"><div class="action-icon-group"><button class="btn btn-icon btn-danger delete-btn" onclick="openDeleteModal('${file.name.replaceAll("'", "\\'")}', '${folderPath.replaceAll("'", "\\'")}', true)" title="Delete folder"><svg class="icon icon-trash" aria-hidden="true"><use href="#icon-trash"></use></svg></button></div></td>`;
+        fileTableContent += `<td class="text-end"><div class="action-icon-group"><button class="btn btn-icon btn-danger delete-btn" data-action="delete" data-name="${file.name}" data-path="${folderPath}" data-is-epub="false" data-is-folder="true" title="Delete folder"><svg class="icon icon-trash" aria-hidden="true"><use href="/icons.svg#icon-trash"></use></svg></button></div></td>`;
         fileTableContent += "</tr>";
       } else {
         let filePath = currentPath;
@@ -118,15 +118,15 @@ async function hydrate() {
         const icon = file.isEpub ? "epub" : "file";
 
         fileTableContent += `<tr class="${file.isEpub ? "epub-file" : ""}">`;
-        fileTableContent += `<td><span class="file-icon"><svg class="icon icon-${icon}" aria-hidden="true"><use href="#icon-${icon}"></use></svg></span></td>`;
+        fileTableContent += `<td><span class="file-icon"><svg class="icon icon-${icon}" aria-hidden="true"><use href="/icons.svg#icon-${icon}"></use></svg></span></td>`;
         fileTableContent += `<td>${escapeHtml(file.name)}`;
         fileTableContent += "</td>";
         fileTableContent += `<td>${getFileExtension(file.name).toLocaleUpperCase()}</td>`;
         fileTableContent += `<td class="size-col text-nowrap text-end"><code>${formatFileSize(file.size)}</code></td>`;
         fileTableContent += `<td class="text-end"><div class="action-icon-group">`;
-        fileTableContent += `<button class="btn btn-icon move-btn" onclick="openMoveModal('${file.name.replaceAll("'", "\\'")}', '${filePath.replaceAll("'", "\\'")}', ${file.isEpub})" title="Move file"><svg class="icon icon-move-file" aria-hidden="true"><use href="#icon-move-file"></use></svg></button>`;
-        fileTableContent += `<button class="btn btn-icon rename-btn" onclick="openRenameModal('${file.name.replaceAll("'", "\\'")}', '${filePath.replaceAll("'", "\\'")}', ${file.isEpub})" title="Rename file"><svg class="icon icon-edit" aria-hidden="true"><use href="#icon-edit"></use></svg></button>`;
-        fileTableContent += `<button class="btn btn-icon btn-danger delete-btn" onclick="openDeleteModal('${file.name.replaceAll("'", "\\'")}', '${filePath.replaceAll("'", "\\'")}', false, ${file.isEpub})" title="Delete file"><svg class="icon icon-trash" aria-hidden="true"><use href="#icon-trash"></use></svg></button>`;
+        fileTableContent += `<button class="btn btn-icon move-btn" data-action="move" data-name="${file.name}" data-path="${filePath}" data-is-epub="${file.isEpub}" title="Move file"><svg class="icon icon-move-file" aria-hidden="true"><use href="/icons.svg#icon-move-file"></use></svg></button>`;
+        fileTableContent += `<button class="btn btn-icon rename-btn" data-action="rename" data-name="${file.name}" data-path="${filePath}" data-is-epub="${file.isEpub}" title="Rename file"><svg class="icon icon-edit" aria-hidden="true"><use href="/icons.svg#icon-edit"></use></svg></button>`;
+        fileTableContent += `<button class="btn btn-icon btn-danger delete-btn" data-action="delete" data-name="${file.name}" data-path="${filePath}" data-is-epub="${file.isEpub}" data-is-folder="false" title="Delete file"><svg class="icon icon-trash" aria-hidden="true"><use href="/icons.svg#icon-trash"></use></svg></button>`;
         fileTableContent += `</div></td>`;
         fileTableContent += "</tr>";
       }
@@ -142,23 +142,23 @@ async function hydrate() {
 function openUploadModal() {
   document.getElementById("uploadPathDisplay")!.innerHTML =
     currentPath === "/"
-      ? '/ <svg class="icon" aria-hidden="true"><use href="#icon-home"></use></svg>'
+      ? '/ <svg class="icon" aria-hidden="true"><use href="/icons.svg#icon-home"></use></svg>'
       : currentPath;
-  (document.getElementById("uploadModal") as HTMLDialogElement)!.showModal();
-}
 
-function closeUploadModal() {
-  (document.getElementById("uploadModal") as HTMLDialogElement)!.close();
   (document.getElementById("fileInput") as HTMLInputElement)!.value = "";
   (document.getElementById("uploadBtn") as HTMLButtonElement)!.disabled = true;
   document.getElementById("progress-container")!.style.display = "none";
   document.getElementById("progress-fill")!.style.width = "0%";
   document.getElementById("progress-fill")!.style.backgroundColor = "#27ae60";
+
+  (document.getElementById("uploadModal") as HTMLDialogElement)!.showModal();
 }
 
 function openFolderModal() {
-  document.getElementById("folderPathDisplay")!.textContent =
-    currentPath === "/" ? "/ root" : currentPath;
+  document.getElementById("folderPathDisplay")!.innerHTML =
+    currentPath === "/"
+      ? '/ <svg class="icon" aria-hidden="true"><use href="/icons.svg#icon-home"></use></svg>'
+      : currentPath;
   (document.getElementById("folderModal") as HTMLDialogElement)!.showModal();
   (document.getElementById("folderName") as HTMLInputElement)!.value = "";
   document.getElementById("folderName")!.focus();
@@ -186,7 +186,12 @@ function getWsUrl() {
 }
 
 // Upload file via WebSocket (faster, binary protocol)
-function uploadFileWebSocket(file: File, onProgress?: (uploaded: number, total: number) => void, onComplete?: () => void, onError?: (error: string) => void): Promise<void> {
+function uploadFileWebSocket(
+  file: File,
+  onProgress?: (uploaded: number, total: number) => void,
+  onComplete?: () => void,
+  onError?: (error: string) => void,
+): Promise<void> {
   return new Promise((resolve, reject) => {
     const ws = new WebSocket(getWsUrl());
     let uploadStarted = false;
@@ -297,7 +302,12 @@ function uploadFileWebSocket(file: File, onProgress?: (uploaded: number, total: 
 }
 
 // Upload file via HTTP (fallback method)
-function uploadFileHTTP(file: File, onProgress?: (uploaded: number, total: number) => void, onComplete?: () => void, onError?: (error: string) => void): Promise<void> {
+function uploadFileHTTP(
+  file: File,
+  onProgress?: (uploaded: number, total: number) => void,
+  onComplete?: () => void,
+  onError?: (error: string) => void,
+): Promise<void> {
   return new Promise((resolve, reject) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -342,9 +352,15 @@ function uploadFile(e: Event) {
     return;
   }
 
-  const progressContainer = document.getElementById("progress-container") as HTMLDivElement;
-  const progressFill = document.getElementById("progress-fill") as HTMLDivElement;
-  const progressText = document.getElementById("progress-text") as HTMLDivElement;
+  const progressContainer = document.getElementById(
+    "progress-container",
+  ) as HTMLDivElement;
+  const progressFill = document.getElementById(
+    "progress-fill",
+  ) as HTMLDivElement;
+  const progressText = document.getElementById(
+    "progress-text",
+  ) as HTMLDivElement;
   const uploadBtn = document.getElementById("uploadBtn") as HTMLButtonElement;
 
   progressContainer.style.display = "block";
@@ -361,7 +377,7 @@ function uploadFile(e: Event) {
         progressFill.style.backgroundColor = "#4caf50";
         progressText.textContent = "All uploads complete!";
         setTimeout(() => {
-          closeUploadModal();
+          closeModal("uploadModal");
           hydrate();
         }, 1000);
       } else {
@@ -370,7 +386,7 @@ function uploadFile(e: Event) {
         progressText.textContent = `${files.length - failedFiles.length}/${files.length} uploaded. Failed: ${failedList}`;
         failedUploadsGlobal = failedFiles;
         setTimeout(() => {
-          closeUploadModal();
+          closeModal("uploadModal");
           showFailedUploadsBanner();
           hydrate();
         }, 2000);
@@ -444,7 +460,7 @@ function showFailedUploadsBanner() {
     item.className = "failed-file-item";
     item.innerHTML = `
       <div class="failed-file-info">
-        <div class="failed-file-name"><svg class="icon icon-${icon}" aria-hidden="true"><use href="#icon-${icon}"></use></svg> ${escapeHtml(failedFile.name)}</div>
+        <div class="failed-file-name"><svg class="icon icon-${icon}" aria-hidden="true"><use href="/icons.svg#icon-${icon}"></use></svg> ${escapeHtml(failedFile.name)}</div>
         <div class="failed-file-error">Error: ${escapeHtml(failedFile.error)}</div>
       </div>
     `;
@@ -517,7 +533,9 @@ function retryAllFailedUploads() {
 }
 
 function createFolder() {
-  const folderName = (document.getElementById("folderName") as HTMLInputElement)!.value.trim();
+  const folderName = (document.getElementById(
+    "folderName",
+  ) as HTMLInputElement)!.value.trim();
 
   if (!folderName) {
     alert("Please enter a folder name!");
@@ -559,10 +577,10 @@ function createFolder() {
 function openRenameModal(name: string, path: string, isEpub = false) {
   const iconType = isEpub ? "epub" : "file";
   document.getElementById("renameItemName")!.innerHTML =
-    `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="#icon-${iconType}"></use></svg> ${name}`;
+    `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="/icons.svg#icon-${iconType}"></use></svg> ${name}`;
   (document.getElementById("renameItemPath") as HTMLInputElement)!.value = path;
   (document.getElementById("renameNewName") as HTMLInputElement)!.value = name;
-  document.getElementById("renameModal")!.classList.add("open");
+  (document.getElementById("renameModal") as HTMLDialogElement)!.showModal();
   setTimeout(() => {
     const input = document.getElementById("renameNewName")! as HTMLInputElement;
     input.focus();
@@ -576,8 +594,11 @@ function closeRenameModal() {
 
 function confirmRename(e: Event) {
   e.preventDefault();
-  const path = (document.getElementById("renameItemPath")! as HTMLInputElement).value;
-  const newName = (document.getElementById("renameNewName")! as HTMLInputElement).value.trim();
+  const path = (document.getElementById("renameItemPath")! as HTMLInputElement)
+    .value;
+  const newName = (
+    document.getElementById("renameNewName")! as HTMLInputElement
+  ).value.trim();
 
   if (!newName) {
     alert("Please enter a new name.");
@@ -601,12 +622,12 @@ function confirmRename(e: Event) {
     } else {
       alert("Failed to rename: " + xhr.responseText);
     }
-    closeRenameModal();
+    closeModal("renameModal");
   };
 
   xhr.onerror = function () {
     alert("Failed to rename - network error");
-    closeRenameModal();
+    closeModal("renameModal");
   };
 
   xhr.send(formData);
@@ -648,7 +669,7 @@ async function loadMoveFolderOptions() {
     }
   }
 
-  const rootFiles = await fetchFolders("/") as FileEntry[];
+  const rootFiles = (await fetchFolders("/")) as FileEntry[];
   rootFiles.forEach((file) => {
     if (file.isDirectory) {
       options.add("/" + file.name);
@@ -656,7 +677,7 @@ async function loadMoveFolderOptions() {
   });
 
   if (currentPath !== "/") {
-    const currentFiles = await fetchFolders(currentPath) as FileEntry[];
+    const currentFiles = (await fetchFolders(currentPath)) as FileEntry[];
     currentFiles.forEach((file) => {
       if (file.isDirectory) {
         let folderPath = currentPath;
@@ -667,7 +688,9 @@ async function loadMoveFolderOptions() {
     });
   }
 
-  const dataList = document.getElementById("moveFolderOptions")! as HTMLDataListElement;
+  const dataList = document.getElementById(
+    "moveFolderOptions",
+  )! as HTMLDataListElement;
   dataList.innerHTML = "";
   Array.from(options)
     .sort()
@@ -681,11 +704,11 @@ async function loadMoveFolderOptions() {
 function openMoveModal(name: string, path: string, isEpub = false) {
   const iconType = isEpub ? "epub" : "file";
   document.getElementById("moveItemName")!.innerHTML =
-    `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="#icon-${iconType}"></use></svg> ${name}`;
+    `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="/icons.svg#icon-${iconType}"></use></svg> ${name}`;
   (document.getElementById("moveItemPath") as HTMLInputElement)!.value = path;
   (document.getElementById("moveDestPath") as HTMLInputElement)!.value =
     currentPath === "/" ? "/" : currentPath;
-  document.getElementById("moveModal")!.classList.add("open");
+  (document.getElementById("moveModal") as HTMLDialogElement)!.showModal();
   loadMoveFolderOptions();
   setTimeout(() => {
     (document.getElementById("moveDestPath") as HTMLInputElement)!.focus();
@@ -698,8 +721,11 @@ function closeMoveModal() {
 
 function confirmMove(e: Event) {
   e.preventDefault();
-  const path = (document.getElementById("moveItemPath") as HTMLInputElement)!.value;
-  const destPath = normalizePath((document.getElementById("moveDestPath") as HTMLInputElement)!.value);
+  const path = (document.getElementById("moveItemPath") as HTMLInputElement)!
+    .value;
+  const destPath = normalizePath(
+    (document.getElementById("moveDestPath") as HTMLInputElement)!.value,
+  );
 
   if (!destPath) {
     alert("Please enter a destination folder.");
@@ -731,25 +757,32 @@ function confirmMove(e: Event) {
 }
 
 // Delete functions
-function openDeleteModal(name: string, path: string, isFolder: boolean, isEpub = false) {
+function openDeleteModal(
+  name: string,
+  path: string,
+  isFolder: boolean,
+  isEpub = false,
+) {
   const iconType = isFolder ? "folder" : isEpub ? "epub" : "file";
   document.getElementById("deleteItemName")!.innerHTML =
-    `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="#icon-${iconType}"></use></svg> ${name}`;
+    `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="/icons.svg#icon-${iconType}"></use></svg> ${name}`;
   (document.getElementById("deleteItemPath") as HTMLInputElement)!.value = path;
-  (document.getElementById("deleteItemType") as HTMLInputElement)!.value = isFolder
-    ? "folder"
-    : "file";
-  document.getElementById("deleteModal")!.classList.add("open");
+  (document.getElementById("deleteItemType") as HTMLInputElement)!.value =
+    isFolder ? "folder" : "file";
+  (document.getElementById("deleteModal") as HTMLDialogElement)!.showModal();
 }
 
 function closeDeleteModal() {
-  document.getElementById("deleteModal")!.classList.remove("open");
+  (document.getElementById("deleteModal") as HTMLDialogElement)!.close();
 }
 
 function confirmDelete(e: Event) {
   e.preventDefault();
-  const path = (document.getElementById("deleteItemPath") as HTMLInputElement).value;
-  const itemType = (document.getElementById("deleteItemType") as HTMLInputElement).value;
+  const path = (document.getElementById("deleteItemPath") as HTMLInputElement)
+    .value;
+  const itemType = (
+    document.getElementById("deleteItemType") as HTMLInputElement
+  ).value;
 
   const formData = new FormData();
   formData.append("path", path);
@@ -763,34 +796,69 @@ function confirmDelete(e: Event) {
       window.location.reload();
     } else {
       alert("Failed to delete: " + xhr.responseText);
-      closeDeleteModal();
+      closeModal("deleteModal");
     }
   };
 
   xhr.onerror = function () {
     alert("Failed to delete - network error");
-    closeDeleteModal();
+    closeModal("deleteModal");
   };
 
   xhr.send(formData);
 }
 
 function init() {
-    hydrate();
+  hydrate();
 
-    document.querySelector(".upload-action-btn")!.addEventListener("click", openUploadModal);
-    document.querySelector("#uploadModal .modal-close")!.addEventListener("click", closeUploadModal);
-    document.querySelector(".folder-action-btn")!.addEventListener("click", openFolderModal);
-    document.getElementById("uploadForm")!.addEventListener("submit", uploadFile);
-    document.querySelector("#uploadForm #fileInput")!.addEventListener("change", validateFile);
-    document.getElementById("create-folder-form")!.addEventListener("submit", createFolder);
-    document.getElementById("rename-form")!.addEventListener("submit", confirmRename);
-    document.getElementById("move-form")!.addEventListener("submit", confirmMove);
-    document.getElementById("delete-form")!.addEventListener("submit", confirmDelete);
-    document.querySelector("button.retry-all-btn")!.addEventListener("click", retryAllFailedUploads);
-    // document.getElementById("deleteConfirmBtn")!.addEventListener("click", () => openMoveModal);
-    // document.getElementById("deleteConfirmBtn")!.addEventListener("click", () => openRenameModal);
-    // document.getElementById("deleteConfirmBtn")!.addEventListener("click", () => openDeleteModal);
+  document
+    .querySelector(".upload-action-btn")!
+    .addEventListener("click", openUploadModal);
+  document
+    .querySelector(".folder-action-btn")!
+    .addEventListener("click", openFolderModal);
+  document.getElementById("uploadForm")!.addEventListener("submit", uploadFile);
+  document
+    .querySelector("#uploadForm #fileInput")!
+    .addEventListener("change", validateFile);
+  document
+    .getElementById("create-folder-form")!
+    .addEventListener("submit", createFolder);
+  document
+    .getElementById("rename-form")!
+    .addEventListener("submit", confirmRename);
+  document.getElementById("move-form")!.addEventListener("submit", confirmMove);
+  document
+    .getElementById("delete-form")!
+    .addEventListener("submit", confirmDelete);
+  document
+    .querySelector("button.retry-all-btn")!
+    .addEventListener("click", retryAllFailedUploads);
+
+  document.getElementById("file-table")?.addEventListener("click", (e) => {
+    const target = e.target as HTMLElement;
+    const btn = target.closest("button[data-action]") as HTMLButtonElement;
+
+    if (!btn) return;
+
+    const action = btn.getAttribute("data-action");
+    const name = btn.getAttribute("data-name") || "";
+    const path = btn.getAttribute("data-path") || "";
+    const isEpub = btn.getAttribute("data-is-epub") === "true";
+
+    switch (action) {
+      case "move":
+        openMoveModal(name, path, isEpub);
+        break;
+      case "rename":
+        openRenameModal(name, path, isEpub);
+        break;
+      case "delete":
+        const isFolder = btn.getAttribute("data-is-folder") === "true";
+        openDeleteModal(name, path, isFolder, isEpub);
+        break;
+    }
+  });
 }
 
 document.addEventListener("DOMContentLoaded", init);

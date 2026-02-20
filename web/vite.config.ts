@@ -1,13 +1,13 @@
 import { defineConfig } from "vite";
-import { routeRedirectPlugin } from "./src/route-redirect-middleware";
+import { routeRedirectPlugin } from "./src/route-redirect-plugin";
 import { mockDevServerPlugin } from 'vite-plugin-mock-dev-server'
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   base: "./",
   plugins: [
-    mockDevServerPlugin(),
+    mode === 'mock' ? mockDevServerPlugin() : undefined,
     routeRedirectPlugin(),
-  ],
+  ].filter(Boolean),
   server: {
     open: "/HomePage.html",
     proxy: {
@@ -20,4 +20,4 @@ export default defineConfig({
       strict: false,
     },
   },
-});
+}));

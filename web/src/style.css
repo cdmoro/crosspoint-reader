@@ -114,7 +114,7 @@ h1 .logo {
   padding: 0 4px;
   border-radius: 4px;
 }
-h1 .logo svg {
+h1 .logo img {
   width: 18px;
   height: 18px;
 }
@@ -192,6 +192,7 @@ footer .icon {
   align-items: center;
   gap: 6px;
   font-size: 16px;
+  line-height: 1.5;
 }
 .btn-sm {
   padding: 0.25rem 0.5rem;
