@@ -7,6 +7,7 @@ body {
   --accent-color-rgb: 110, 154, 130;
   --accent-color: rgb(var(--accent-color-rgb));
   --accent-color-10: rgba(var(--accent-color-rgb), 0.1);
+  --accent-color-50: rgba(var(--accent-color-rgb), 0.5);
   --accent-color-highlight: #5a8c73;
 
   font-family:
@@ -97,4 +98,161 @@ svg.icon {
 }
 .text-end {
   text-align: end;
+}
+
+h1 {
+  margin-top: 0;
+  color: var(--title-color);
+  display: flex;
+  gap: 8px;
+  font-size: 24px;
+  align-items: center;
+  padding-bottom: 10px;
+}
+h1 .logo {
+  background-color: #6e9a82;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+h1 .logo svg {
+  width: 18px;
+  height: 18px;
+}
+h2 {
+  color: var(--title-color);
+  margin-top: 0;
+  font-size: 20px;
+}
+.card {
+  background: var(--card-background);
+  border-radius: 4px;
+  padding: 15px;
+  margin: 15px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.card h3 {
+  margin: 0;
+  color: var(--title-color);
+  font-size: 18px;
+}
+
+.nav-links {
+  margin: 20px 0 15px;
+  border-bottom: solid 2px var(--border-color);
+  display: flex;
+  gap: 8px;
+  padding-bottom: 8px;
+}
+.nav-links a {
+  padding: 8px 15px;
+  font-size: 0.85em;
+  color: var(--font-color);
+  text-decoration: none;
+  border-radius: 4px;
+}
+.nav-links a.active {
+  color: #fff;
+  text-decoration: none;
+  background: var(--accent-color);
+}
+.nav-links a:hover {
+  color: var(--font-color);
+  text-decoration: none;
+  background: var(--border-color);
+}
+.nav-links a.active:hover {
+  background: var(--accent-color-highlight);
+}
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.85em;
+}
+footer .icon {
+  height: 20px;
+  width: 20px;
+}
+
+.btn {
+  color: white;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+}
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  border-radius: 0.25rem;
+}
+.btn-primary {
+  background-color: var(--accent-color);
+}
+.btn-primary:hover {
+  background-color: var(--accent-color-highlight);
+}
+.btn-secondary {
+  background-color: #6c757d;
+}
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+.btn-icon:hover {
+  background: var(--accent-color);
+  color: #fff;
+}
+.btn-icon.btn-danger:hover {
+  background: tomato;
+  color: #fff;
+}
+.btn-primary:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.btn-lg {
+  padding: 0.5rem 1rem;
+  font-size: 1.25rem;
+  border-radius: 0.5rem;
+}
+
+dialog::backdrop {
+  background: var(--accent-color-50);
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+    font-size: 14px;
+  }
+  h1 {
+    justify-content: center;
+  }
+  .card {
+    padding: 12px;
+    margin: 10px 0;
+  }
+  .nav-links a {
+    padding: 8px 12px;
+    margin-right: 6px;
+    font-size: 0.9em;
+    flex: 1;
+    text-align: center;
+  }
+  footer {
+    justify-content: center;
+  }
 }

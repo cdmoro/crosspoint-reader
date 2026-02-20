@@ -1,38 +1,3 @@
-h1 {
-  margin-top: 0;
-  color: var(--title-color);
-  display: flex;
-  gap: 8px;
-  font-size: 24px;
-  align-items: center;
-  padding-bottom: 10px;
-}
-h1 .logo {
-  background-color: #6e9a82;
-  padding: 0 4px;
-  border-radius: 4px;
-}
-h1 .logo svg {
-  width: 18px;
-  height: 18px;
-}
-h2 {
-  color: var(--title-color);
-  margin-top: 0;
-  font-size: 20px;
-}
-.card {
-  background: var(--card-background);
-  border-radius: 4px;
-  padding: 15px;
-  margin: 15px 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-.card h3 {
-  margin: 0;
-  color: var(--title-color);
-  font-size: 18px;
-}
 .contents-card {
   margin-top: 6px;
 }
@@ -77,120 +42,36 @@ h2 {
   color: var(--font-color);
   font-weight: 500;
 }
-.nav-links {
-  margin: 20px 0 15px;
-  border-bottom: solid 2px var(--border-color);
-  display: flex;
-  gap: 8px;
-  padding-bottom: 8px;
-}
-.nav-links a {
-  padding: 8px 15px;
-  font-size: 0.85em;
-  color: var(--font-color);
-  text-decoration: none;
-  border-radius: 4px;
-}
-.nav-links a.active {
-  color: #fff;
-  text-decoration: none;
-  background: var(--accent-color);
-}
-.nav-links a:hover {
-  color: var(--font-color);
-  text-decoration: none;
-  background: var(--border-color);
-}
-.nav-links a.active:hover {
-  background: var(--accent-color-highlight);
-}
-a {
-  color: var(--accent-color);
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
 /* Action buttons */
 .action-buttons {
   display: flex;
   gap: 10px;
 }
-.btn {
-  color: white;
-  padding: 8px 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 16px;
-}
-.btn-sm {
-  padding: 0.25rem 0.5rem;
-  font-size: 0.875rem;
-  border-radius: 0.25rem;
-}
-.btn-primary {
-  background-color: var(--accent-color);
-}
-.btn-primary:hover {
-  background-color: var(--accent-color-highlight);
-}
-.btn-secondary {
-  background-color: #6c757d;
-}
-.btn-secondary:hover {
-  background-color: #5a6268;
-}
-.btn-icon:hover {
-  background: var(--accent-color);
-  color: #fff;
-}
-.btn-icon.btn-danger:hover {
-  background: tomato;
-  color: #fff;
-}
 /* Upload modal */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 200;
-  justify-content: center;
-  align-items: center;
-}
-.modal-overlay.open {
-  display: flex;
-}
-.modal {
+dialog {
   background: var(--background);
   border-radius: 8px;
   padding: 25px;
   max-width: 450px;
   width: 90%;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border: none;
 }
-.modal-header {
+dialog .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
   margin-bottom: 1.5em;
 }
-.modal h3 {
+dialog h3 {
   margin: 0;
   color: var(--title-color);
   display: flex;
   gap: 10px;
   align-items: center;
 }
-.modal-close {
+dialog .modal-close {
   float: right;
   background: none;
   border: none;
@@ -199,10 +80,10 @@ a:hover {
   color: var(--accent-color);
   line-height: 1;
 }
-.modal-close:hover {
+dialog .modal-close:hover {
   color: #7f8c8d;
 }
-.modal-footer {
+dialog .modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
@@ -251,10 +132,6 @@ td.size-col {
 .upload-form input[type="file"] {
   margin: 10px 0;
   width: 100%;
-}
-.btn-primary:disabled {
-  background-color: #95a5a6;
-  cursor: not-allowed;
 }
 #uploadPathDisplay,
 #folderPathDisplay {
@@ -489,16 +366,6 @@ svg.icon-epub {
 .alert svg.icon-epub {
   color: var(--alert-color);
 }
-footer {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  font-size: 0.85em;
-}
-footer .icon {
-  height: 20px;
-  width: 20px;
-}
 @keyframes rotation {
   from {
     transform: rotate(0deg);
@@ -509,17 +376,6 @@ footer .icon {
 }
 /* Mobile responsive styles */
 @media (max-width: 600px) {
-  body {
-    padding: 10px;
-    font-size: 14px;
-  }
-  h1 {
-    justify-content: center;
-  }
-  .card {
-    padding: 12px;
-    margin: 10px 0;
-  }
   .page-header {
     gap: 10px;
     margin-bottom: 12px;
@@ -530,13 +386,6 @@ footer .icon {
   }
   .breadcrumb-inline {
     font-size: 0.95em;
-  }
-  .nav-links a {
-    padding: 8px 12px;
-    margin-right: 6px;
-    font-size: 0.9em;
-    flex: 1;
-    text-align: center;
   }
   .action-buttons {
     gap: 6px;
@@ -612,8 +461,5 @@ footer .icon {
   .no-files {
     padding: 20px;
     font-size: 0.9em;
-  }
-  footer {
-    justify-content: center;
   }
 }

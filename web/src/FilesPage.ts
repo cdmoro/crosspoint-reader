@@ -1,13 +1,12 @@
 import type { FailedFile, FileEntry } from "./types";
 import "./style.css";
 import "./FilesPage.css";
-import { escapeHtml } from "./utils";
+import { escapeHtml, getFileExtension } from "./utils";
 
 // get current path from query parameter
 const currentPath = decodeURIComponent(
   new URLSearchParams(window.location.search).get("path") || "/",
 );
-const FILE_EXTENSION_REGEX = /\.([0-9a-z]+)(?:[\?#]|$)/i;
 
 function formatFileSize(bytes: number) {
   if (bytes === 0) return "0 B";
@@ -24,15 +23,6 @@ function formatFileSize(bytes: number) {
 }
 
 async function hydrate() {
-  // Close modals when clicking overlay
-  document.querySelectorAll(".modal-overlay").forEach((overlay) => {
-    overlay.addEventListener("click", (e) => {
-      if (e.target === overlay) {
-        overlay.classList.remove("open");
-      }
-    });
-  });
-
   const breadcrumbs = document.getElementById("directory-breadcrumbs")!;
   const fileTable = document.getElementById("file-table")!;
 
@@ -125,16 +115,13 @@ async function hydrate() {
         let filePath = currentPath;
         if (!filePath.endsWith("/")) filePath += "/";
         filePath += file.name;
-
-        const match = file.name.match(FILE_EXTENSION_REGEX);
-        const fileExtension = match ? match[1].toUpperCase() : "";
         const icon = file.isEpub ? "epub" : "file";
 
         fileTableContent += `<tr class="${file.isEpub ? "epub-file" : ""}">`;
         fileTableContent += `<td><span class="file-icon"><svg class="icon icon-${icon}" aria-hidden="true"><use href="#icon-${icon}"></use></svg></span></td>`;
         fileTableContent += `<td>${escapeHtml(file.name)}`;
         fileTableContent += "</td>";
-        fileTableContent += `<td>${fileExtension}</td>`;
+        fileTableContent += `<td>${getFileExtension(file.name).toLocaleUpperCase()}</td>`;
         fileTableContent += `<td class="size-col text-nowrap text-end"><code>${formatFileSize(file.size)}</code></td>`;
         fileTableContent += `<td class="text-end"><div class="action-icon-group">`;
         fileTableContent += `<button class="btn btn-icon move-btn" onclick="openMoveModal('${file.name.replaceAll("'", "\\'")}', '${filePath.replaceAll("'", "\\'")}', ${file.isEpub})" title="Move file"><svg class="icon icon-move-file" aria-hidden="true"><use href="#icon-move-file"></use></svg></button>`;
@@ -157,11 +144,11 @@ function openUploadModal() {
     currentPath === "/"
       ? '/ <svg class="icon" aria-hidden="true"><use href="#icon-home"></use></svg>'
       : currentPath;
-  document.getElementById("uploadModal")!.classList.add("open");
+  (document.getElementById("uploadModal") as HTMLDialogElement)!.showModal();
 }
 
 function closeUploadModal() {
-  document.getElementById("uploadModal")!.classList.remove("open");
+  (document.getElementById("uploadModal") as HTMLDialogElement)!.close();
   (document.getElementById("fileInput") as HTMLInputElement)!.value = "";
   (document.getElementById("uploadBtn") as HTMLButtonElement)!.disabled = true;
   document.getElementById("progress-container")!.style.display = "none";
@@ -172,13 +159,13 @@ function closeUploadModal() {
 function openFolderModal() {
   document.getElementById("folderPathDisplay")!.textContent =
     currentPath === "/" ? "/ root" : currentPath;
-  document.getElementById("folderModal")!.classList.add("open");
+  (document.getElementById("folderModal") as HTMLDialogElement)!.showModal();
   (document.getElementById("folderName") as HTMLInputElement)!.value = "";
   document.getElementById("folderName")!.focus();
 }
 
-function closeFolderModal() {
-  document.getElementById("folderModal")!.classList.remove("open");
+function closeModal(id: string) {
+  (document.getElementById(id) as HTMLDialogElement)!.close();
 }
 
 function validateFile() {
@@ -345,8 +332,8 @@ function uploadFileHTTP(file: File, onProgress?: (uploaded: number, total: numbe
   });
 }
 
-function uploadFile(event: Event) {
-  event.preventDefault();
+function uploadFile(e: Event) {
+  e.preventDefault();
   const fileInput = document.getElementById("fileInput") as HTMLInputElement;
   const files = Array.from(fileInput.files || []);
 
@@ -451,19 +438,23 @@ function showFailedUploadsBanner() {
   filesList.innerHTML = "";
 
   failedUploadsGlobal.forEach((failedFile, index) => {
-    const match = failedFile.name.match(FILE_EXTENSION_REGEX);
-    const fileExtension = match ? match[1].toUpperCase() : "";
-    const icon = fileExtension === "EPUB" ? "epub" : "file";
-
+    const icon = getFileExtension(failedFile.name) === "epub" ? "epub" : "file";
     const item = document.createElement("div");
+
     item.className = "failed-file-item";
     item.innerHTML = `
       <div class="failed-file-info">
         <div class="failed-file-name"><svg class="icon icon-${icon}" aria-hidden="true"><use href="#icon-${icon}"></use></svg> ${escapeHtml(failedFile.name)}</div>
         <div class="failed-file-error">Error: ${escapeHtml(failedFile.error)}</div>
       </div>
-      <button class="btn btn-sm retry-btn" onclick="retrySingleUpload(${index})">Retry</button>
     `;
+
+    const retryBtn = document.createElement("button");
+    retryBtn.className = "btn btn-sm retry-btn";
+    retryBtn.textContent = "Retry";
+    retryBtn.addEventListener("click", () => retrySingleUpload(index));
+
+    item.appendChild(retryBtn);
     filesList.appendChild(item);
   });
 
@@ -583,7 +574,8 @@ function closeRenameModal() {
   document.getElementById("renameModal")!.classList.remove("open");
 }
 
-function confirmRename() {
+function confirmRename(e: Event) {
+  e.preventDefault();
   const path = (document.getElementById("renameItemPath")! as HTMLInputElement).value;
   const newName = (document.getElementById("renameNewName")! as HTMLInputElement).value.trim();
 
@@ -704,7 +696,8 @@ function closeMoveModal() {
   document.getElementById("moveModal")!.classList.remove("open");
 }
 
-function confirmMove() {
+function confirmMove(e: Event) {
+  e.preventDefault();
   const path = (document.getElementById("moveItemPath") as HTMLInputElement)!.value;
   const destPath = normalizePath((document.getElementById("moveDestPath") as HTMLInputElement)!.value);
 
@@ -753,7 +746,8 @@ function closeDeleteModal() {
   document.getElementById("deleteModal")!.classList.remove("open");
 }
 
-function confirmDelete() {
+function confirmDelete(e: Event) {
+  e.preventDefault();
   const path = (document.getElementById("deleteItemPath") as HTMLInputElement).value;
   const itemType = (document.getElementById("deleteItemType") as HTMLInputElement).value;
 
@@ -781,23 +775,22 @@ function confirmDelete() {
   xhr.send(formData);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+function init() {
     hydrate();
 
     document.querySelector(".upload-action-btn")!.addEventListener("click", openUploadModal);
     document.querySelector("#uploadModal .modal-close")!.addEventListener("click", closeUploadModal);
-    
     document.querySelector(".folder-action-btn")!.addEventListener("click", openFolderModal);
-    document.querySelector("#folderModal .modal-close")!.addEventListener("click", closeFolderModal);
     document.getElementById("uploadForm")!.addEventListener("submit", uploadFile);
-    document.getElementById("fileInput")!.addEventListener("change", validateFile);
-    document.getElementById("createFolderBtn")!.addEventListener("click", createFolder);
-    document.getElementById("renameConfirmBtn")!.addEventListener("click", confirmRename);
-    document.getElementById("moveConfirmBtn")!.addEventListener("click", confirmMove);
-    document.getElementById("deleteConfirmBtn")!.addEventListener("click", confirmDelete);
-    document.getElementById("deleteConfirmBtn")!.addEventListener("click", retryAllFailedUploads);
-    document.getElementById("deleteConfirmBtn")!.addEventListener("click", () => retrySingleUpload);
-    document.getElementById("deleteConfirmBtn")!.addEventListener("click", () => openMoveModal);
-    document.getElementById("deleteConfirmBtn")!.addEventListener("click", () => openRenameModal);
-    document.getElementById("deleteConfirmBtn")!.addEventListener("click", () => openDeleteModal);
-});
+    document.querySelector("#uploadForm #fileInput")!.addEventListener("change", validateFile);
+    document.getElementById("create-folder-form")!.addEventListener("submit", createFolder);
+    document.getElementById("rename-form")!.addEventListener("submit", confirmRename);
+    document.getElementById("move-form")!.addEventListener("submit", confirmMove);
+    document.getElementById("delete-form")!.addEventListener("submit", confirmDelete);
+    document.querySelector("button.retry-all-btn")!.addEventListener("click", retryAllFailedUploads);
+    // document.getElementById("deleteConfirmBtn")!.addEventListener("click", () => openMoveModal);
+    // document.getElementById("deleteConfirmBtn")!.addEventListener("click", () => openRenameModal);
+    // document.getElementById("deleteConfirmBtn")!.addEventListener("click", () => openDeleteModal);
+}
+
+document.addEventListener("DOMContentLoaded", init);

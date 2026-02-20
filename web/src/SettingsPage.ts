@@ -1,19 +1,11 @@
 import type { Setting } from "./types";
 import "./style.css";
 import "./SettingsPage.css";
+import { escapeHtml } from "./utils";
 
 let allSettings: Setting[] = [];
 let originalValues: Record<string, unknown> = {};
 const VALID_SETTING_TYPES = ["toggle", "enum", "value", "string"];
-
-function escapeHtml(unsafe: string) {
-  return unsafe
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
 
 function showToast(text: string, type: "info" | "success" | "error" = "info") {
   const toast = document.getElementById("toast")!;
