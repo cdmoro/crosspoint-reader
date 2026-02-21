@@ -1068,7 +1068,7 @@
 
   // Modal functions
   function openUploadModal() {
-    document.getElementById('uploadPathDisplay').innerHTML = currentPath === '/' ? '/ <svg class="icon" aria-hidden="true"><use href="#icon-home"></use></svg>' : currentPath;
+    document.getElementById('uploadPathDisplay').innerHTML = currentPath === '/' ? '/ <svg class="icon" aria-hidden="true"><use href="#icon-home"></use></svg>' : escapeHtml(currentPath);
     document.getElementById('uploadModal').classList.add('open');
   }
 
@@ -1082,7 +1082,7 @@
   }
 
   function openFolderModal() {
-    document.getElementById('folderPathDisplay').textContent = currentPath === '/' ? '/ root' : currentPath;
+    document.getElementById('folderPathDisplay').innerHTML = currentPath === '/' ? '/ <svg class="icon" aria-hidden="true"><use href="#icon-home"></use></svg>' : escapeHtml(currentPath);
     document.getElementById('folderModal').classList.add('open');
     document.getElementById('folderName').value = '';
     document.getElementById('folderName').focus();
@@ -1427,7 +1427,8 @@ function retryAllFailedUploads() {
   validateFile();
 }
 
-  function createFolder() {
+  function createFolder(event) {
+    event.preventDefault();
     const folderName = document.getElementById('folderName').value.trim();
 
     if (!folderName) {
@@ -1467,7 +1468,7 @@ function retryAllFailedUploads() {
   // Rename functions
   function openRenameModal(name, path, isEpub = false) {
     const iconType = isEpub ? 'epub' : 'file';
-    document.getElementById('renameItemName').innerHTML = `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="#icon-${iconType}"></use></svg> ${name}`;
+    document.getElementById('renameItemName').innerHTML = `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="#icon-${iconType}"></use></svg> ${escapeHtml(name)}`;
     document.getElementById('renameItemPath').value = path;
     document.getElementById('renameNewName').value = name;
     document.getElementById('renameModal').classList.add('open');
@@ -1583,7 +1584,7 @@ function retryAllFailedUploads() {
 
   function openMoveModal(name, path, isEpub = false) {
     const iconType = isEpub ? 'epub' : 'file';
-    document.getElementById('moveItemName').innerHTML = `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="#icon-${iconType}"></use></svg> ${name}`;
+    document.getElementById('moveItemName').innerHTML = `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="#icon-${iconType}"></use></svg> ${escapeHtml(name)}`;
     document.getElementById('moveItemPath').value = path;
     document.getElementById('moveDestPath').value = currentPath === '/' ? '/' : currentPath;
     document.getElementById('moveModal').classList.add('open');
@@ -1633,7 +1634,7 @@ function retryAllFailedUploads() {
   // Delete functions
   function openDeleteModal(name, path, isFolder, isEpub = false) {
     const iconType = isFolder ? 'folder' : (isEpub ? 'epub' : 'file');
-    document.getElementById('deleteItemName').innerHTML = `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="#icon-${iconType}"></use></svg> ${name}`;
+    document.getElementById('deleteItemName').innerHTML = `<svg class="icon icon-${iconType}" aria-hidden="true"><use href="#icon-${iconType}"></use></svg> ${escapeHtml(name)}`;
     document.getElementById('deleteItemPath').value = path;
     document.getElementById('deleteItemType').value = isFolder ? 'folder' : 'file';
     document.getElementById('deleteModal').classList.add('open');

@@ -374,6 +374,7 @@
   let allSettings = [];
   let originalValues = {};
   const VALID_SETTING_TYPES = ['toggle', 'enum', 'value', 'string'];
+  let toastTimeout = null;
 
   function escapeHtml(unsafe) {
     return unsafe
@@ -385,11 +386,12 @@
   }
 
   function showToast(text, type = "info") {
+    if (toastTimeout) clearTimeout(toastTimeout);
     const toast = document.getElementById('toast');
     toast.textContent = text;
     toast.className = 'toast toast-' + type;
     toast.style.display = 'block';
-    setTimeout(() => toast.style.display = 'none', 4000);
+    toastTimeout = setTimeout(() => toast.style.display = 'none', 4000);
   }
 
   function renderControl(setting) {
