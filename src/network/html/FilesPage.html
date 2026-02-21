@@ -934,6 +934,7 @@
   const currentPath = decodeURIComponent(new URLSearchParams(window.location.search).get('path') || '/');
   const FILE_EXTENSION_REGEX = /\.([0-9a-z]+)(?:[\?#]|$)/i;
   const SIZES = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+  const k = 1024;
 
   function escapeHtml(unsafe) {
     return unsafe
@@ -946,7 +947,7 @@
 
   function formatFileSize(bytes) {
     if (bytes === 0) return '0 B';
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)).toLocaleString() + ' ' + SIZES[i];
   }
 
