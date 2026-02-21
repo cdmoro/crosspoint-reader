@@ -588,10 +588,6 @@ function openRenameModal(name: string, path: string, isEpub = false) {
   }, 50);
 }
 
-function closeRenameModal() {
-  document.getElementById("renameModal")!.classList.remove("open");
-}
-
 function confirmRename(e: Event) {
   e.preventDefault();
   const path = (document.getElementById("renameItemPath")! as HTMLInputElement)
@@ -770,10 +766,6 @@ function openDeleteModal(
   (document.getElementById("deleteItemType") as HTMLInputElement)!.value =
     isFolder ? "folder" : "file";
   (document.getElementById("deleteModal") as HTMLDialogElement)!.showModal();
-}
-
-function closeDeleteModal() {
-  (document.getElementById("deleteModal") as HTMLDialogElement)!.close();
 }
 
 function confirmDelete(e: Event) {
