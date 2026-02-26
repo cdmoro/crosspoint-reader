@@ -8,7 +8,6 @@
     :root {
       --font-color: #333;
       --bg: #f5f5f5;
-      --title-color: #2c3e50;
       --card-bg: #fff;
       --label-color: #7f8c8d;
       --border-color: #eee;
@@ -33,7 +32,6 @@
       :root {
         --font-color: #f5f5f5;
         --bg: #333;
-        --title-color: #ecf0f1;
         --card-bg: #444;
         --label-color: #bdc3c7;
         --border-color: #555;
@@ -61,7 +59,7 @@
       background-color: var(--bg);
       color: var(--font-color);
     }
-    cr-icon {
+    c-svg {
       width: 16px;
       height: 16px;
       display: inline-block;
@@ -95,14 +93,11 @@
       gap: 8px;
     }
     h1 svg {
-      width: 18px;
-      height: 18px;
       background-color: var(--accent-color);
       padding: 4px;
       border-radius: 4px;
     }
     h2 {
-      color: var(--title-color);
       margin-top: 0;
       font-size: 20px;
     }
@@ -115,7 +110,6 @@
     }
     .card h3 {
       margin: 0;
-      color: var(--title-color);
       font-size: 18px;
     }
     .contents-card {
@@ -257,9 +251,10 @@
       border: none;
       font-size: 1.5em;
       cursor: pointer;
+      opacity: .7;
     }
     .modal-close:hover {
-      color: var(--title-color);
+      opacity: 1;
     }
     .file-table {
       width: 100%;
@@ -359,12 +354,6 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 12px;
-    }
-    .contents-title {
-      font-size: 1.1em;
-      font-weight: 600;
-      color: var(--title-color);
-      margin: 0;
     }
     #folder-summary {
       color: var(--label-color);
@@ -470,26 +459,6 @@
     }
     .retry-btn:hover {
       background-color: #e0a800;
-    }
-    .retry-all-btn {
-      background-color: #ffc107;
-      color: #533f03;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    .retry-all-btn:hover {
-      background-color: #e0a800;
-    }
-    /* Delete modal */
-    .delete-warning {
-      color: #e74c3c;
-      font-weight: 600;
-      margin: 10px 0;
-    }
-    .delete-item-name {
-      font-weight: 600;
-      color: var(--title-color);
-      word-break: break-all;
     }
     .loader-container {
       display: flex;
@@ -635,7 +604,7 @@
 </head>
 <body>
 <h1>
-  <svg xmlns="http://www.w3.org/2000/svg" width="162" height="180" fill="none" viewBox="0 0 162 180"><path fill="#000" d="M141.133 1.938c8.969-5.38 20.384 1.079 20.388 11.537v153.051c-.004 10.458-11.419 16.916-20.388 11.537l-60.374-36.226-60.372 36.226C11.417 183.442.003 176.984 0 166.526V13.475C.003 3.017 11.418-3.441 20.387 1.938L80.76 38.16zm-19.858 115.586-28.89 17.34 54.896 32.947c.996.597 2.261-.126 2.264-1.285v-65.959zM14.239 12.19c-.995-.598-2.26.125-2.263 1.285v73.137l62.796 37.678V48.51z"/><path fill="#fff" d="m121.275 117.524-28.89 17.34 54.896 32.947c.996.597 2.261-.126 2.264-1.285v-65.959ZM14.24 12.19c-.996-.598-2.26.125-2.264 1.285v73.137l62.797 37.678V48.51Z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 162 180"><path fill="#000" d="M141.133 1.938c8.969-5.38 20.384 1.079 20.388 11.537v153.051c-.004 10.458-11.419 16.916-20.388 11.537l-60.374-36.226-60.372 36.226C11.417 183.442.003 176.984 0 166.526V13.475C.003 3.017 11.418-3.441 20.387 1.938L80.76 38.16zm-19.858 115.586-28.89 17.34 54.896 32.947c.996.597 2.261-.126 2.264-1.285v-65.959zM14.239 12.19c-.995-.598-2.26.125-2.263 1.285v73.137l62.796 37.678V48.51z"/><path fill="#fff" d="m121.275 117.524-28.89 17.34 54.896 32.947c.996.597 2.261-.126 2.264-1.285v-65.959ZM14.24 12.19c-.996-.598-2.26.125-2.264 1.285v73.137l62.797 37.678V48.51Z"/></svg>
   CrossPoint Reader
 </h1>
 <div class="nav-links">
@@ -647,9 +616,9 @@
 <div class="page-header">
   <h2>File Manager</h2>
   <div class="action-buttons">
-    <button class="btn btn-sm btn-primary" onclick="openUploadModal()"><cr-icon name="upload"></cr-icon> Upload</button>
-    <button class="btn btn-sm btn-primary" onclick="openFolderModal()"><cr-icon name="folder"></cr-icon> New Folder</button>
-    <button class="btn btn-sm btn-danger" onclick="openDeleteSelectedModal()"><cr-icon name="trash"></cr-icon> Delete Selected</button>
+    <button class="btn btn-sm btn-primary" onclick="openUploadModal()"><c-svg name="upload"></c-svg> Upload</button>
+    <button class="btn btn-sm btn-primary" onclick="openFolderModal()"><c-svg name="folder"></c-svg> New Folder</button>
+    <button class="btn btn-sm btn-danger" onclick="openDeleteSelectedModal()"><c-svg name="trash"></c-svg> Delete Selected</button>
   </div>
 </div>
 
@@ -658,11 +627,11 @@
 <!-- Failed Uploads Banner -->
 <div class="alert alert-warning" id="failedUploadsBanner">
   <div class="failed-uploads-header">
-    <h3 class="failed-uploads-title"><cr-icon name="warning"></cr-icon> Some files failed to upload</h3>
+    <h3 class="failed-uploads-title"><c-svg name="warning"></c-svg> Some files failed to upload</h3>
     <button class="dismiss-btn" onclick="dismissFailedUploads()" title="Dismiss">&times;</button>
   </div>
   <div id="failedFilesList"></div>
-  <button class="btn btn-warning btn-sm retry-all-btn" onclick="retryAllFailedUploads()">Retry All Failed Uploads</button>
+  <button id="retryAllBtn" class="btn btn-warning btn-sm" onclick="retryAllFailedUploads()">Retry All Failed Uploads</button>
 </div>
 
 <div class="card contents-card">
@@ -678,11 +647,11 @@
   </div>
 </div>
 
-<footer>CrossPoint E-Reader • Open Source</footer>
+<footer>CrossPoint Reader • Open Source</footer>
 
 <dialog id="uploadModal" closedby="any">
   <div class="modal-header">
-    <h3><cr-icon name="upload"></cr-icon> Upload file</h3>
+    <h3><c-svg name="upload"></c-svg> Upload file</h3>
     <button class="modal-close" onclick="closeModal('uploadModal')">&times;</button>
   </div>
   <div class="upload-form">
@@ -700,9 +669,9 @@
   </div>
 </dialog>
 
-<dialog id="folderModal">
+<dialog id="folderModal" closedby="any">
   <div class="modal-header">
-    <h3><cr-icon name="folder"></cr-icon> New Folder</h3>
+    <h3><c-svg name="folder"></c-svg> New Folder</h3>
     <button class="modal-close" onclick="closeModal('folderModal')">&times;</button>
   </div>
   <div class="folder-form">
@@ -716,13 +685,13 @@
   </div>
 </dialog>
 
-<dialog id="deleteModal">
+<dialog id="deleteModal" closedby="any">
   <div class="modal-header">
-    <h3><cr-icon name="trash"></cr-icon> Delete Item(s)</h3>
+    <h3><c-svg name="trash"></c-svg> Delete Item(s)</h3>
     <button class="modal-close" onclick="closeModal('deleteModal')">&times;</button>
   </div>
   <div class="folder-form">
-    <p class="alert alert-warning alert-icon"><cr-icon name="warning"></cr-icon> This action cannot be undone!</p>
+    <p class="alert alert-warning alert-icon"><c-svg name="warning"></c-svg> This action cannot be undone!</p>
     <p class="file-info">Are you sure you want to delete the following item(s)?</p>
     <div id="deleteItemList"></div>
     <div class="modal-footer">
@@ -732,9 +701,9 @@
   </div>
 </dialog>
 
-<dialog id="renameModal">
+<dialog id="renameModal" closedby="any">
   <div class="modal-header">
-    <h3><cr-icon name="edit"></cr-icon> Rename File</h3>
+    <h3><c-svg name="edit"></c-svg> Rename File</h3>
     <button class="modal-close" onclick="closeModal('renameModal')">&times;</button>
   </div>
   <div class="folder-form">
@@ -748,9 +717,9 @@
   </div>
 </dialog>
 
-<dialog id="moveModal">
+<dialog id="moveModal" closedby="any">
   <div class="modal-header">
-    <h3><cr-icon name="move"></cr-icon> Move File</h3>
+    <h3><c-svg name="move"></c-svg> Move File</h3>
     <button class="modal-close" onclick="closeModal('moveModal')">&times;</button>
   </div>
   <div class="folder-form">
@@ -772,7 +741,7 @@
   const currentPath = decodeURIComponent(new URLSearchParams(window.location.search).get('path') || '/');
   const FILE_EXTENSION_REGEX = /\.([0-9a-z]+)(?:[\?#]|$)/i;
   const id = id => document.getElementById(id);
-  const icon = i => `<cr-icon name="${i}"></cr-icon>`;
+  const icon = i => `<c-svg name="${i}"></c-svg>`;
 
   function escapeHtml(unsafe) {
     return unsafe
@@ -1255,23 +1224,18 @@ function showFailedUploadsBanner() {
   failedUploadsGlobal.forEach((failedFile, i) => {
     const match = failedFile.name.match(FILE_EXTENSION_REGEX);
     const ext = match ? match[1].toUpperCase() : '';
-
     const item = document.createElement('div');
     item.className = 'failed-file-item';
-    item.innerHTML = `
-      <div class="failed-file-info">
+    item.innerHTML = `<div class="failed-file-info">
         <div class="failed-file-name">${icon(ext === 'EPUB' ? 'epub' : 'file')} ${escapeHtml(failedFile.name)}</div>
         <div class="failed-file-error">Error: ${escapeHtml(failedFile.error)}</div>
       </div>
-      <button class="btn btn-sm retry-btn" onclick="retrySingleUpload(${i})">Retry</button>
-    `;
+      <button class="btn btn-sm retry-btn" onclick="retrySingleUpload(${i})">Retry</button>`;
     filesList.appendChild(item);
   });
   
   // Ensure retry all button is visible
-  const retryAllBtn = banner.querySelector('.retry-all-btn');
-  if (retryAllBtn) retryAllBtn.style.display = '';
-  
+  id('retryAllBtn').style.display = '';
   banner.classList.add('show');
 }
 
@@ -1475,8 +1439,7 @@ function retryAllFailedUploads() {
   }
 
   function openMoveModal(name, path, isEpub = false) {
-    const iconName = isEpub ? 'epub' : 'file';
-    id('moveItemName').innerHTML = `${icon(iconName)} ${escapeHtml(name)}`;
+    id('moveItemName').innerHTML = `${icon(isEpub ? 'epub' : 'file')} ${escapeHtml(name)}`;
     id('moveItemPath').value = path;
     id('moveDestPath').value = currentPath === '/' ? '/' : currentPath;
     id('moveModal').showModal();
@@ -1503,7 +1466,7 @@ function retryAllFailedUploads() {
       if (xhr.status === 200) {
         window.location.reload();
       } else {
-        alert('Failed to move: ' + xhr.responseText);
+        alert(`Failed to move: ${xhr.responseText}`);
       }
       closeModal('moveModal');
     };
@@ -1516,7 +1479,7 @@ function retryAllFailedUploads() {
     xhr.send(formData);
   }
 
-  customElements.define('cr-icon', class extends HTMLElement{
+  customElements.define('c-svg', class extends HTMLElement{
     connectedCallback() {
       const n = this.getAttribute('name');
       n && (this.innerHTML=`<svg class="icon ${n}"><use href="#i-${n}"></use></svg>`)
