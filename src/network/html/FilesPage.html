@@ -311,15 +311,13 @@
     tbody td.size-col {
       text-align: end;
     }
-    .folder-link,
-    .file-link {
+    .file-table a {
       color: var(--accent-color);
       text-decoration: none;
       cursor: pointer;
     }
-    .folder-link:hover,
-    .file-link:hover {
-      color: var(--accent-hover-color);
+    .file-table a:hover {
+      color: #fff;
       text-decoration: underline;
     }
     .upload-form {
@@ -848,7 +846,7 @@
           fileTableContent += `<tr class="folder-row">
             <td><input type="checkbox" class="select-item" data-path="${filePathUri}" data-name="${nameEscaped}" data-type="folder"></td>
             <td class="icon-col">${icon('folder')}</td>
-            <td><a href="/files?path=${filePathUri}" class="folder-link">${nameEscaped}</a></td>
+            <td><a href="/files?path=${filePathUri}">${nameEscaped}</a></td>
             <td></td>
             <td></td>
             <td><div class="actions"><button class="btn btn-icon btn-danger" onclick="openDeleteModal('${file.name.replaceAll("'", "\\'")}', '${filePath.replaceAll("'", "\\'")}', true)" title="Delete folder">${icon('trash')}</button></div></td>
@@ -864,7 +862,7 @@
           fileTableContent += `<tr>
             <td><input type="checkbox" class="select-item" data-path="${filePathUri}" data-name="${nameEscaped}" data-type="${fileType}"></td>
             <td class="icon-col">${icon(fileType)}</td>
-            <td><a rel="noopener noreferrer" target="_blank" href="/download?path=${filePathUri}" class="file-link">${nameEscaped}</a></td>
+            <td><a rel="noopener noreferrer" target="_blank" href="/download?path=${filePathUri}">${nameEscaped}</a></td>
             <td>${fileExtension}</td>
             <td class="size-col">${formatFileSize(file.size)}</td>
             <td><div class="actions">
