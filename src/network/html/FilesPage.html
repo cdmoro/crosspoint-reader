@@ -746,7 +746,12 @@
 
 <script>
   // get current path from query parameter
-  const currentPath = decodeURIComponent(new URLSearchParams(window.location.search).get('path') || '/');
+  let currentPath = '/';
+  try {
+    currentPath = decodeURIComponent(new URLSearchParams(window.location.search).get('path') || '/');
+  } catch (e) {
+    console.error('Invalid path encoding:', e);
+  }
   const FILE_EXTENSION_REGEX = /\.([0-9a-z]+)(?:[\?#]|$)/i;
   const id = id => document.getElementById(id);
   const icon = i => `<c-svg name="${i}"></c-svg>`;
@@ -999,8 +1004,8 @@ function uploadFileWebSocket(file, onProgress, onComplete, onError) {
 
     ws.onopen = function() {
       console.log('[WS] Connected, starting upload:', file.name);
-      // Send start message: START:<filename>:<size>:<path>
-      ws.send(`START:${file.name}:${file.size}:${currentPath}`);
+      // Send start message as JSON for safe parsing
+      ws.send(JSON.stringify({ cmd: 'START', name: file.name, size: file.size, path: currentPath }));
     };
 
     ws.onmessage = async function(event) {
