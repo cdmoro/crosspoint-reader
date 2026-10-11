@@ -536,7 +536,7 @@ body.web-ui  {
     flex-wrap: wrap;
   }
   .web-ui .setting-row  {
-    align-items: flex-start;
+    border-bottom: none;
   }
   .web-ui .setting-control  {
     max-width: 100%;
