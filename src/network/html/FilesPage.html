@@ -1807,7 +1807,7 @@
       </div>
       </div><!-- end picker-columns -->
       <!-- Sync compatibility warning - outside picker-columns -->
-      <div class="convert-warning" id="convertWarning" style="display:none;">
+      <div class="convert-warning" id="convertWarning" style="display:none;" role="alert" aria-live="polite">
         ⚠️ Converting will modify files and can break hash‑based sync. ⚠️<br>
         Please back up or disable sync before proceeding.
       </div>
@@ -2124,7 +2124,7 @@
           fileTableContent += `<td><span class="file-icon"><svg class="icon"><use href="/assets/icons.svg#folder"></use></svg></span><a href="/files?path=${encodeURIComponent(folderPath)}" class="folder-link">${escapeHtml(file.name)}</a></td>`;
           fileTableContent += '<td>FOLDER</td>';
           fileTableContent += '<td>-</td>';
-          fileTableContent += `<td class="actions-col"><div class="action-icon-group"><button class="delete-btn" data-action="delete" data-name="${escapeHtml(file.name)}" data-path="${escapeHtml(folderPath)}" data-folder="true" title="Delete folder"><svg class="icon"><use href="/assets/icons.svg#trash"></use></svg></button></div></td>`;
+          fileTableContent += `<td class="actions-col"><div class="action-icon-group"><button class="delete-btn" data-action="delete" data-name="${escapeHtml(file.name)}" data-path="${escapeHtml(folderPath)}" data-folder="true" title="Delete folder" aria-label="Delete folder"><svg class="icon"><use href="/assets/icons.svg#trash"></use></svg></button></div></td>`;
           fileTableContent += '</tr>';
         } else {
           let filePath = currentPath;
@@ -2145,9 +2145,9 @@
           fileTableContent += file.isEpub ? '<td>EPUB</td>' : `<td>${escapeHtml(file.name.split('.').pop().toUpperCase())}</td>`;
           fileTableContent += `<td>${formatFileSize(file.size)}</td>`;
           fileTableContent += `<td class="actions-col"><div class="action-icon-group">`;
-          fileTableContent += `<button class="move-btn" data-action="move" data-name="${escapeHtml(file.name)}" data-path="${escapeHtml(filePath)}" title="Move file"><svg class="icon"><use href="/assets/icons.svg#move"></use></svg></button>`;
-          fileTableContent += `<button class="rename-btn" data-action="rename" data-name="${escapeHtml(file.name)}" data-path="${escapeHtml(filePath)}" title="Rename file"><svg class="icon"><use href="/assets/icons.svg#edit"></use></svg></button>`;
-          fileTableContent += `<button class="delete-btn" data-action="delete" data-name="${escapeHtml(file.name)}" data-path="${escapeHtml(filePath)}" data-folder="false" title="Delete file"><svg class="icon"><use href="/assets/icons.svg#trash"></use></svg></button>`;
+          fileTableContent += `<button class="move-btn" data-action="move" data-name="${escapeHtml(file.name)}" data-path="${escapeHtml(filePath)}" title="Move file" aria-label="Move file"><svg class="icon"><use href="/assets/icons.svg#move"></use></svg></button>`;
+          fileTableContent += `<button class="rename-btn" data-action="rename" data-name="${escapeHtml(file.name)}" data-path="${escapeHtml(filePath)}" title="Rename file" aria-label="Rename file"><svg class="icon"><use href="/assets/icons.svg#edit"></use></svg></button>`;
+          fileTableContent += `<button class="delete-btn" data-action="delete" data-name="${escapeHtml(file.name)}" data-path="${escapeHtml(filePath)}" data-folder="false" title="Delete file" aria-label="Delete file"><svg class="icon"><use href="/assets/icons.svg#trash"></use></svg></button>`;
           fileTableContent += `</div></td>`;
           fileTableContent += '</tr>';
         }

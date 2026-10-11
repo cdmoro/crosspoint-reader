@@ -19,7 +19,7 @@
     </nav>
   </div>
   <details class="mobile-nav">
-    <summary>
+    <summary aria-label="Navigation menu">
       <svg class="icon menu-open" viewBox="0 0 24 24">
         <path d="M4 7h16M4 12h16M4 17h16" /></svg
       ><svg class="icon menu-close" viewBox="0 0 24 24">
