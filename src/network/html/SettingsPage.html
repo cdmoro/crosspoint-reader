@@ -239,12 +239,15 @@
   }
 
 
+  let messageTimeout;
+
   function showMessage(text, isError) {
+    clearTimeout(messageTimeout);
     const msg = document.getElementById('message');
     msg.textContent = text;
     msg.className = 'toast ' + (isError ? 'error' : 'success');
     msg.style.display = 'block';
-    setTimeout(function() { msg.style.display = 'none'; }, 4000);
+    messageTimeout = setTimeout(function() { msg.style.display = 'none'; }, 4000);
   }
 
   function renderControl(setting) {
@@ -617,7 +620,7 @@
   }
 
   async function deleteWifiNetwork(idx) {
-    if (!confirm('Delete this Wi-Fi network?')) return;
+    if (!await showWebConfirm('Delete this Wi-Fi network?')) return;
     try {
       const resp = await fetch('/api/wifi/delete', {
         method: 'POST',
@@ -731,7 +734,7 @@
   }
 
   async function deleteOpdsServer(idx) {
-    if (!confirm('Delete this OPDS server?')) return;
+    if (!await showWebConfirm('Delete this OPDS server?')) return;
     try {
       const resp = await fetch('/api/opds/delete', {
         method: 'POST',
