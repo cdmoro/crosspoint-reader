@@ -17,6 +17,7 @@
     </div>
   </form>
 </dialog>
+<div id="webToast" class="toast" role="status" aria-live="polite"></div>
 <script>
 const webMessageDialog = document.getElementById('webMessageDialog');
 const webDialogTitle = document.getElementById('webDialogTitle');
@@ -47,5 +48,16 @@ function showWebAlert(message) {
 
 function showWebConfirm(message) {
   return showWebDialog('Confirm action', message, true);
+}
+
+const webToast = document.getElementById('webToast');
+let webToastTimeout;
+
+function showWebToast(message, isError) {
+  clearTimeout(webToastTimeout);
+  webToast.textContent = message;
+  webToast.className = 'toast' + (isError ? ' error' : '');
+  webToast.style.display = 'block';
+  webToastTimeout = setTimeout(() => { webToast.style.display = 'none'; }, 4000);
 }
 </script>

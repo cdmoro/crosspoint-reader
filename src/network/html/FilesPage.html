@@ -199,6 +199,7 @@
     }
     .modal-overlay::backdrop {
       background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
     }
     .modal {
       background: var(--card-bg);
@@ -338,9 +339,6 @@
     .file-link:hover {
       color: var(--accent-hover-color);
       text-decoration: underline;
-    }
-    .upload-form {
-      margin-bottom: 10px;
     }
     .upload-form input[type="file"] {
       margin: 10px 0;
@@ -1073,6 +1071,18 @@
       margin-bottom: 10px;
       box-sizing: border-box;
     }
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      justify-content: flex-end;
+    }
+    .modal-actions > button,
+    .modal-actions > a {
+      width: auto;
+      margin-top: 0;
+    }
     .folder-btn {
       background-color: var(--warning-color);
       color: var(--button-text);
@@ -1357,6 +1367,9 @@
         padding: 8px 12px;
         margin-right: 6px;
         font-size: 0.9em;
+      }
+      .modal-actions {
+        flex-direction: column-reverse;
       }
       .action-buttons {
         gap: 6px;
@@ -1819,9 +1832,11 @@
         Please back up or disable sync before proceeding.
       </div>
       <!-- Optimize & Upload button - shown when picker is visible, replaces Upload -->
-      <button id="startConversionBtn" class="upload-btn optimize" style="display:none;" onclick="startConversionWithImageStates()">Optimize & Upload</button>
-      <button id="uploadBtn" class="upload-btn" onclick="uploadFile()" disabled>Upload</button>
-      <button class="delete-btn-cancel" onclick="handleCancelUploadModal()">Cancel</button>
+      <div class="modal-actions">
+        <button class="delete-btn-cancel" onclick="handleCancelUploadModal()">Cancel</button>
+        <button id="uploadBtn" class="upload-btn" onclick="uploadFile()" disabled>Upload</button>
+        <button id="startConversionBtn" class="upload-btn optimize" style="display:none;" onclick="startConversionWithImageStates()">Optimize & Upload</button>
+      </div>
       <div id="progress-container">
         <div id="progress-bar"><div id="progress-fill"></div></div>
         <div id="progress-text"></div>
@@ -1844,8 +1859,10 @@
     <div class="folder-form">
       <p class="file-info">Create a new folder in <strong id="folderPathDisplay"></strong></p>
       <input type="text" id="folderName" class="folder-input" placeholder="Folder name..." oninput="document.getElementById('createFolderBtn').disabled = !this.value.trim();">
-      <button class="folder-btn" id="createFolderBtn" onclick="createFolder()" disabled>Create Folder</button>
-      <button class="delete-btn-cancel" onclick="closeFolderModal()">Cancel</button>
+      <div class="modal-actions">
+        <button class="delete-btn-cancel" onclick="closeFolderModal()">Cancel</button>
+        <button class="folder-btn" id="createFolderBtn" onclick="createFolder()" disabled>Create Folder</button>
+      </div>
     </div>
   </div>
 </dialog>
@@ -1859,8 +1876,10 @@
       <p class="delete-warning"><svg class="icon"><use href="/assets/icons.svg#warning"></use></svg> This action cannot be undone!</p>
       <p class="file-info">Are you sure you want to delete the following item(s)?</p>
       <div id="deleteItemList" style="max-height:240px; overflow:auto; margin-bottom:10px;"></div>
-      <button class="delete-btn-confirm" onclick="confirmDelete()">Delete</button>
-      <button class="delete-btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+      <div class="modal-actions">
+        <button class="delete-btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+        <button class="delete-btn-confirm" onclick="confirmDelete()">Delete</button>
+      </div>
     </div>
   </div>
 </dialog>
@@ -1874,8 +1893,10 @@
       <p class="file-info">Renaming <strong id="renameItemName"></strong></p>
       <input type="text" id="renameNewName" class="folder-input" placeholder="New file name...">
       <input type="hidden" id="renameItemPath">
-      <button class="rename-btn-confirm" onclick="confirmRename()">Rename</button>
-      <button class="delete-btn-cancel" onclick="closeRenameModal()">Cancel</button>
+      <div class="modal-actions">
+        <button class="delete-btn-cancel" onclick="closeRenameModal()">Cancel</button>
+        <button class="rename-btn-confirm" onclick="confirmRename()">Rename</button>
+      </div>
     </div>
   </div>
 </dialog>
@@ -1890,8 +1911,10 @@
       <input type="text" id="moveDestPath" class="folder-input" list="moveFolderOptions" placeholder="/Destination/Folder">
       <datalist id="moveFolderOptions"></datalist>
       <input type="hidden" id="moveItemPath">
-      <button class="move-btn-confirm" onclick="confirmMove()">Move</button>
-      <button class="delete-btn-cancel" onclick="closeMoveModal()">Cancel</button>
+      <div class="modal-actions">
+        <button class="delete-btn-cancel" onclick="closeMoveModal()">Cancel</button>
+        <button class="move-btn-confirm" onclick="confirmMove()">Move</button>
+      </div>
     </div>
   </div>
 </dialog>
